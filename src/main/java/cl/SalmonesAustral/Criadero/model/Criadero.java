@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
 //Entidad JPA para representar un Criadero (Centro de Cultivo)
 
 @Entity
