@@ -5,6 +5,7 @@ import cl.SalmonesAustral.Criadero.service.CriaderoService;
 import cl.SalmonesAustral.Criadero.exception.ResourceNotFoundException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +16,16 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RestController
 @RequestMapping("/api/v1/criaderos")
 public class CriaderoController {
-    private final CriaderoService criaderoService;
-    private final WebClient webClient;
+    @Autowired
+    private  CriaderoService criaderoService;
+    private  WebClient webClient;
 
     // Inyección por constructor (best practice)
-    public CriaderoController(CriaderoService criaderoService, WebClient webClient) {
+    /*public CriaderoController(CriaderoService criaderoService, WebClient webClient) {
         this.criaderoService = criaderoService;
         this.webClient = webClient;
-    }
+    }*/
+
 
     // CRUD BÁSICO
  
@@ -73,8 +76,8 @@ public class CriaderoController {
     }
 
     @GetMapping("/activos")
-    public ResponseEntity<List<Criadero>> obtenerActivos() {
-        return ResponseEntity.ok(criaderoService.findActivos());
+    public ResponseEntity<List<Criadero>> obtenerEstado() {
+        return ResponseEntity.ok(criaderoService.findEstado(""));
     }
 
     @GetMapping("/buscar")

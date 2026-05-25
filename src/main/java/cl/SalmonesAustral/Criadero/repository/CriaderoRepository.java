@@ -16,7 +16,7 @@ public interface CriaderoRepository extends JpaRepository<Criadero, Integer> {
    
 
     // Criaderos activos
-    List<Criadero> findByActivoTrue();
+   // List<Criadero> findByEstado(String estado);
 
     // Buscar por nombre (contiene, ignore case)
     List<Criadero> findByNombreContainingIgnoreCase(String nombre);
@@ -34,7 +34,7 @@ public interface CriaderoRepository extends JpaRepository<Criadero, Integer> {
     }
 
     // Query JPQL
-    @Query("SELECT c FROM Criadero c WHERE c.capacidadMaxima > :capacidad")
+    @Query("SELECT c FROM Criadero c WHERE c.capacidadJaulas > :capacidad")
     List<Criadero> findCriaderosConAltaCapacidad(@Param("capacidad") int capacidad);
 
     // Query nativa (como tu ejemplo de editorial)

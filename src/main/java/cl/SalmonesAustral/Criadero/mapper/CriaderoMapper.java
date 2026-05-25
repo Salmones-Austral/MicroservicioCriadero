@@ -16,11 +16,13 @@ public class CriaderoMapper {
      */
     public static Criadero toModel(CreateCriaderoRequest request) {
         return new Criadero(
-                0L, // ID temporal (lo genera la BD)
+                0, // ID temporal (lo genera la BD)
                 request.nombre(),
+                request.ubicacion(),
                 request.region(),
-                request.capacidadMaxima(),
-                request.activo()
+                request.capacidadJaulas(),
+                request.estado(),
+                request.fechaCreacion()
         );
     }
 
@@ -28,13 +30,15 @@ public class CriaderoMapper {
      * Convierte UpdateCriaderoRequest a Criadero (PUT)
      * El ID viene del path
      */
-    public static Criadero toModel(Long id, UpdateCriaderoRequest request) {
+    public static Criadero toModel(int id, UpdateCriaderoRequest request) {
         return new Criadero(
                 id, // ID real desde el endpoint
                 request.nombre(),
+                request.ubicacion(),
                 request.region(),
-                request.capacidadMaxima(),
-                request.activo()
+                request.capacidadJaulas(),
+                request.estado(),
+                request.fechaCreacion()
         );
     }
 }

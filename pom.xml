@@ -29,7 +29,7 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>25</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -67,7 +67,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web-test</artifactId> <!--modificar este webmvc, soluciono dto update, y el mapper. pero mato el pom (parent y dependency)-->
+			<artifactId>spring-boot-starter-webmvc-test</artifactId> <!--modificar este webmvc, soluciono dto update, y el mapper. pero mato el pom (parent y dependency)-->
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

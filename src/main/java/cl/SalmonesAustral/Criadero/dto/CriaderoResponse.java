@@ -1,11 +1,13 @@
 package cl.SalmonesAustral.Criadero.dto;
 
 public class CriaderoResponse {
-    private Long id;
+    private Integer id;
     private String nombre;
+    private String ubicacion;
     private String region;
-    private int capacidadMaxima;
-    private Boolean activo;
+    private int capacidadJaulas;
+    private String estado;
+    private String fechaCreacion;
 
     //Campo calculado (lógica de negocio)
     private String estadoOperacion;
@@ -15,11 +17,11 @@ public class CriaderoResponse {
 
     // GETTERS & SETTERS
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -31,6 +33,14 @@ public class CriaderoResponse {
         this.nombre = nombre;
     }
 
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
     public String getRegion() {
         return region;
     }
@@ -39,22 +49,30 @@ public class CriaderoResponse {
         this.region = region;
     }
 
-    public int getCapacidadMaxima() {
-        return capacidadMaxima;
+    public int getcapacidadJaulas() {
+        return capacidadJaulas;
     }
 
-    public void setCapacidadMaxima(int capacidadMaxima) {
-        this.capacidadMaxima = capacidadMaxima;
+    public void setcapacidadJaulas(int capacidadJaulas) {
+        this.capacidadJaulas = capacidadJaulas;
     }
 
-    public Boolean getActivo() {
-        return activo;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
+    public String getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(String fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+//fin modificaciones de valores faltantes###################
     public String getEstadoOperacion() {
         return estadoOperacion;
     }
