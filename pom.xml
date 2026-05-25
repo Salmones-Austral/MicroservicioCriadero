@@ -5,6 +5,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
+		<!--<version>3.3.5</version> Esta version arreglo todos los rojos, pero dio error en algunas dependencias
+		-->
 		<version>4.0.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
@@ -36,9 +38,18 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webmvc</artifactId>
+			<artifactId>spring-boot-starter-webmvc</artifactId> <!--modificar este webmvc no afecto al proyecto-->
 		</dependency>
-
+		<!-- inicio dependencias adicionles-->
+		<dependency> 
+    		<groupId>org.springframework.boot</groupId> 
+    		<artifactId>spring-boot-starter-validation</artifactId> <!-- llama a las valiaciones-->
+		</dependency>
+		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-webflux</artifactId> 	<!-- llma al webclient-->
+		</dependency>
+		<!-- fin dependencias adicionles-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -56,7 +67,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webmvc-test</artifactId>
+			<artifactId>spring-boot-starter-web-test</artifactId> <!--modificar este webmvc, soluciono dto update, y el mapper. pero mato el pom (parent y dependency)-->
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -78,6 +89,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+        			<release>21</release>
+    			</configuration>
 				<executions>
 					<execution>
 						<id>default-compile</id>
