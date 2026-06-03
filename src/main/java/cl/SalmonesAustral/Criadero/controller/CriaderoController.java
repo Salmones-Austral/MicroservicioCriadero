@@ -19,6 +19,7 @@ public class CriaderoController {
     @Autowired
     private  CriaderoService criaderoService;
     private  WebClient webClient;
+    
 
     // Inyección por constructor (best practice)
     /*public CriaderoController(CriaderoService criaderoService, WebClient webClient) {

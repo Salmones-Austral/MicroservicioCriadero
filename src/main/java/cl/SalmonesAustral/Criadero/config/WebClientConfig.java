@@ -20,10 +20,5 @@ public class WebClientConfig {
 
     // Cliente externo (ejemplo tipo PokeAPI)
    
-    @Bean
-    public WebClient externalApiWebClient(WebClient.Builder builder) {
-        return builder
-                .baseUrl("https://api.example.com")
-                .build();
-    }
+ 
 }
