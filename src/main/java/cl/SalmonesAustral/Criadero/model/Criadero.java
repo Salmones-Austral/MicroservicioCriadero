@@ -15,7 +15,7 @@ public class Criadero {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
@@ -27,7 +27,7 @@ public class Criadero {
     private String region;
 
     @Column(name = "capacidad_jaulas", nullable = false)
-    private int capacidadJaulas;
+    private Integer capacidadJaulas;
 
     @Column(name = "estado", nullable = false, length = 50)
     private String estado; // ACTIVO, INACTIVO, EN MANTENCION
@@ -39,7 +39,7 @@ public class Criadero {
     public Criadero() {}
 
     // Constructor completo
-    public Criadero(int id, String nombre, String ubicacion, String region, int capacidadJaulas,
+    public Criadero(Integer id, String nombre, String ubicacion, String region, Integer capacidadJaulas,
                     String estado, String fechaCreacion) {
         this.id = id;
         this.nombre = nombre;
@@ -52,11 +52,11 @@ public class Criadero {
 
     // Getters y Setters
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -84,11 +84,11 @@ public class Criadero {
         this.region = region;
     }
 
-    public int getCapacidadJaulas() {
+    public Integer getCapacidadJaulas() {
         return capacidadJaulas;
     }
 
-    public void setCapacidadJaulas(int capacidadJaulas) {
+    public void setCapacidadJaulas(Integer capacidadJaulas) {
         this.capacidadJaulas = capacidadJaulas;
     }
 

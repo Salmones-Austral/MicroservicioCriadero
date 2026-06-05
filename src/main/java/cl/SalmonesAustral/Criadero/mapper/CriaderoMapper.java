@@ -9,7 +9,7 @@ public class CriaderoMapper {
     // POST
     public static Criadero toModel(CreateCriaderoRequest request) {
         return new Criadero(
-                0, // ID generado por la BD
+                null, // ❌ ANTES DECÍA 0. AHORA ES null para que haga el INSERT (Nuevo registro)
                 request.getNombre(),
                 request.getUbicacion(),
                 request.getRegion(),
@@ -20,9 +20,9 @@ public class CriaderoMapper {
     }
 
     // PUT
-    public static Criadero toModel(int id, UpdateCriaderoRequest request) {
+    public static Criadero toModel(Integer id, UpdateCriaderoRequest request) { // <-- Cambiado int a Integer
         return new Criadero(
-                id, // ID pasado por el endpoint
+                id, // ID pasado por el endpoint para hacer el UPDATE
                 request.getNombre(),
                 request.getUbicacion(),
                 request.getRegion(),

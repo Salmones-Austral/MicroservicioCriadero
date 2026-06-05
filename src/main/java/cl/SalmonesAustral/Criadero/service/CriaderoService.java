@@ -61,4 +61,6 @@ public class CriaderoService {
     public long totalCriaderosCustom() {
         return criaderoRepository.totalCriaderos();
     }
+
+    
 }

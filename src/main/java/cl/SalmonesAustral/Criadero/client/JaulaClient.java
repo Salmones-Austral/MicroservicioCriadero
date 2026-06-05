@@ -14,7 +14,7 @@ public class JaulaClient {
 
     public JaulaClient(WebClient.Builder webClientBuilder) {
         // En producción, usa el nombre registrado en Eureka, ej: "http://servicio-jaula"
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8082").build(); 
+        this.webClient = webClientBuilder.baseUrl("http://localhost:8081").build(); 
     }
 
     public boolean tieneJaulasActivas(Long criaderoId) {

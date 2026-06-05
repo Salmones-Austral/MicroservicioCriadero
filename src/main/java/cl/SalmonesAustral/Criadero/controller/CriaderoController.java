@@ -4,6 +4,11 @@ import cl.SalmonesAustral.Criadero.model.Criadero;
 import cl.SalmonesAustral.Criadero.service.CriaderoService;
 import cl.SalmonesAustral.Criadero.exception.ResourceNotFoundException;
 
+// IMPORTS NUEVOS PARA LOS DTOs Y EL MAPPER
+import cl.SalmonesAustral.Criadero.dto.CreateCriaderoRequest;
+import cl.SalmonesAustral.Criadero.dto.UpdateCriaderoRequest;
+import cl.SalmonesAustral.Criadero.mapper.CriaderoMapper;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,16 +29,14 @@ public class CriaderoController {
     private final CriaderoService criaderoService;
     private final WebClient webClient;
 
-    // Inyección por constructor (Best Practice - Solucionado para evitar NullPointerException)
     @Autowired
     public CriaderoController(CriaderoService criaderoService, WebClient.Builder webClientBuilder) {
         this.criaderoService = criaderoService;
-        // Es mejor inyectar el Builder y construirlo aquí o en una clase @Configuration
         this.webClient = webClientBuilder.build(); 
     }
 
     // ==========================================
-    // CRUD BÁSICO CON MANEJO DE ERRORES
+    // CRUD BÁSICO CON MANEJO DE ERRORES Y DTOs
     // ==========================================
 
     @GetMapping
@@ -42,8 +45,9 @@ public class CriaderoController {
     }
 
     @PostMapping
-    public ResponseEntity<?> crearCriadero(@Valid @RequestBody Criadero criadero, BindingResult result) {
-        // Manejo de errores de validación capturados desde el RequestBody
+    // CAMBIO AQUÍ: Ahora recibe CreateCriaderoRequest
+    public ResponseEntity<?> crearCriadero(@Valid @RequestBody CreateCriaderoRequest request, BindingResult result) {
+        
         if (result.hasErrors()) {
             Map<String, String> errores = new HashMap<>();
             result.getFieldErrors().forEach(error -> 
@@ -52,7 +56,10 @@ public class CriaderoController {
             return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
         }
 
+        // MAGIA DEL MAPPER: Convierte el DTO validado al modelo de la BD
+        Criadero criadero = CriaderoMapper.toModel(request);
         Criadero nuevo = criaderoService.save(criadero);
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
@@ -65,11 +72,11 @@ public class CriaderoController {
     }
 
     @PutMapping("/{id}")
+    // CAMBIO AQUÍ: Ahora recibe UpdateCriaderoRequest
     public ResponseEntity<?> actualizarCriadero(
             @PathVariable Integer id,
-            @Valid @RequestBody Criadero criadero, BindingResult result) {
+            @Valid @RequestBody UpdateCriaderoRequest request, BindingResult result) {
 
-        // Manejo de errores de validación en la actualización
         if (result.hasErrors()) {
             Map<String, String> errores = new HashMap<>();
             result.getFieldErrors().forEach(error -> 
@@ -78,7 +85,8 @@ public class CriaderoController {
             return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
         }
 
-        criadero.setId(id); // aseguramos consistencia
+        // MAGIA DEL MAPPER: Convierte el DTO validado al modelo de la BD
+        Criadero criadero = CriaderoMapper.toModel(id, request);
         Criadero actualizado = criaderoService.update(criadero);
 
         return ResponseEntity.ok(actualizado);
@@ -101,7 +109,6 @@ public class CriaderoController {
 
     @GetMapping("/activos")
     public ResponseEntity<List<Criadero>> obtenerEstado() {
-        // Asumo que findEstado recibe un String, puedes ajustarlo según tu Service
         return ResponseEntity.ok(criaderoService.findEstado("Activo")); 
     }
 
@@ -116,7 +123,6 @@ public class CriaderoController {
 
     @GetMapping("/{id}/jaulas")
     public ResponseEntity<List<Object>> obtenerJaulasDeCriadero(@PathVariable Long id) {
-        // Llamada a microservicio de Jaulas
         List<Object> jaulas = webClient.get()
                 .uri("http://localhost:8081/api/v1/jaulas/criadero/{id}", id)
                 .retrieve()
