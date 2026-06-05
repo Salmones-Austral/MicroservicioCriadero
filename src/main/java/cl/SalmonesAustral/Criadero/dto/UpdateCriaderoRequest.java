@@ -1,33 +1,45 @@
 package cl.SalmonesAustral.Criadero.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-/**
- * DTO para actualizar un Criadero (PUT)
- * No incluye ID porque se obtiene del path parameter
- */
-public record UpdateCriaderoRequest(
-        /* creamos usamos todas las variables de el modelo para que el maper las llame desde el dto
-        habian errores como el estado siendo null y otras que eran int como capacidad maxima
-        */
+public class UpdateCriaderoRequest {
 
-        @NotBlank(message = "El nombre no puede estar vacío")
-        String nombre,
+    @NotBlank(message = "El nombre del criadero no puede estar vacío")
+    @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
+    private String nombre;
 
-        @NotBlank(message = "La ubicacion no puede estar vacía")
-        String ubicacion,
+    @NotBlank(message = "La ubicación es obligatoria")
+    private String ubicacion;
 
-        @NotBlank(message = "La región no puede estar vacía")
-        String region,
+    @NotBlank(message = "La región es obligatoria")
+    private String region;
 
-        @Positive(message = "La capacidad máxima debe ser mayor a 0")
-        int capacidadJaulas,
+    @NotNull(message = "La capacidad de jaulas es obligatoria")
+    @Min(value = 1, message = "La capacidad debe ser de al menos 1 jaula")
+    private Integer capacidadJaulas;
 
-        @NotBlank(message = "El estado activo es obligatorio")
-        String estado,
+    @NotBlank(message = "El estado es obligatorio")
+    private String estado;
 
-        @NotBlank(message = "La fecha creacion no puede estar vacía")
-        String fechaCreacion
+    @NotBlank(message = "La fecha de creación es obligatoria")
+    private String fechaCreacion;
 
-) {}
+    // Getters
+    public String getNombre() { return nombre; }
+    public String getUbicacion() { return ubicacion; }
+    public String getRegion() { return region; }
+    public Integer getCapacidadJaulas() { return capacidadJaulas; }
+    public String getEstado() { return estado; }
+    public String getFechaCreacion() { return fechaCreacion; }
+
+    // Setters
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setUbicacion(String ubicacion) { this.ubicacion = ubicacion; }
+    public void setRegion(String region) { this.region = region; }
+    public void setCapacidadJaulas(Integer capacidadJaulas) { this.capacidadJaulas = capacidadJaulas; }
+    public void setEstado(String estado) { this.estado = estado; }
+    public void setFechaCreacion(String fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+}

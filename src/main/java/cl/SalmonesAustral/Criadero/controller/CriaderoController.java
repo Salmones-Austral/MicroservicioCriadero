@@ -3,33 +3,38 @@ package cl.SalmonesAustral.Criadero.controller;
 import cl.SalmonesAustral.Criadero.model.Criadero;
 import cl.SalmonesAustral.Criadero.service.CriaderoService;
 import cl.SalmonesAustral.Criadero.exception.ResourceNotFoundException;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import jakarta.validation.Valid;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @RestController
 @RequestMapping("/api/v1/criaderos")
 public class CriaderoController {
+
+    private final CriaderoService criaderoService;
+    private final WebClient webClient;
+
+    // Inyección por constructor (Best Practice - Solucionado para evitar NullPointerException)
     @Autowired
-    private  CriaderoService criaderoService;
-    private  WebClient webClient;
-    
-
-    // Inyección por constructor (best practice)
-    /*public CriaderoController(CriaderoService criaderoService, WebClient webClient) {
+    public CriaderoController(CriaderoService criaderoService, WebClient.Builder webClientBuilder) {
         this.criaderoService = criaderoService;
-        this.webClient = webClient;
-    }*/
+        // Es mejor inyectar el Builder y construirlo aquí o en una clase @Configuration
+        this.webClient = webClientBuilder.build(); 
+    }
 
-
-    // CRUD BÁSICO
- 
+    // ==========================================
+    // CRUD BÁSICO CON MANEJO DE ERRORES
+    // ==========================================
 
     @GetMapping
     public ResponseEntity<List<Criadero>> listarCriaderos() {
@@ -37,7 +42,16 @@ public class CriaderoController {
     }
 
     @PostMapping
-    public ResponseEntity<Criadero> crearCriadero(@Valid @RequestBody Criadero criadero) {
+    public ResponseEntity<?> crearCriadero(@Valid @RequestBody Criadero criadero, BindingResult result) {
+        // Manejo de errores de validación capturados desde el RequestBody
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(error -> 
+                errores.put(error.getField(), error.getDefaultMessage())
+            );
+            return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
+        }
+
         Criadero nuevo = criaderoService.save(criadero);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
@@ -51,9 +65,18 @@ public class CriaderoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Criadero> actualizarCriadero(
+    public ResponseEntity<?> actualizarCriadero(
             @PathVariable Integer id,
-            @Valid @RequestBody Criadero criadero) {
+            @Valid @RequestBody Criadero criadero, BindingResult result) {
+
+        // Manejo de errores de validación en la actualización
+        if (result.hasErrors()) {
+            Map<String, String> errores = new HashMap<>();
+            result.getFieldErrors().forEach(error -> 
+                errores.put(error.getField(), error.getDefaultMessage())
+            );
+            return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
+        }
 
         criadero.setId(id); // aseguramos consistencia
         Criadero actualizado = criaderoService.update(criadero);
@@ -66,10 +89,10 @@ public class CriaderoController {
         criaderoService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
     
+    // ==========================================
     // MÉTODOS DE NEGOCIO
-    
+    // ==========================================
 
     @GetMapping("/total")
     public ResponseEntity<Long> totalCriaderos() {
@@ -78,7 +101,8 @@ public class CriaderoController {
 
     @GetMapping("/activos")
     public ResponseEntity<List<Criadero>> obtenerEstado() {
-        return ResponseEntity.ok(criaderoService.findEstado(""));
+        // Asumo que findEstado recibe un String, puedes ajustarlo según tu Service
+        return ResponseEntity.ok(criaderoService.findEstado("Activo")); 
     }
 
     @GetMapping("/buscar")
@@ -86,13 +110,12 @@ public class CriaderoController {
         return ResponseEntity.ok(criaderoService.findByNombre(nombre));
     }
 
-    // 
+    // ==========================================
     // RELACIÓN CON JAULAS (MICROSERVICIO)
-    //
+    // ==========================================
 
     @GetMapping("/{id}/jaulas")
     public ResponseEntity<List<Object>> obtenerJaulasDeCriadero(@PathVariable Long id) {
-
         // Llamada a microservicio de Jaulas
         List<Object> jaulas = webClient.get()
                 .uri("http://localhost:8081/api/v1/jaulas/criadero/{id}", id)
@@ -106,7 +129,6 @@ public class CriaderoController {
 
     @GetMapping("/{id}/total-jaulas")
     public ResponseEntity<Integer> totalJaulas(@PathVariable Long id) {
-
         Integer total = webClient.get()
                 .uri("http://localhost:8081/api/v1/jaulas/criadero/{id}/total", id)
                 .retrieve()
@@ -116,13 +138,12 @@ public class CriaderoController {
         return ResponseEntity.ok(total);
     }
 
-    //
+    // ==========================================
     // COMUNICACIÓN ENTRE MICROSERVICIOS
-    // 
+    // ==========================================
 
     @GetMapping("/notificar")
     public ResponseEntity<String> notificarJaulas(@RequestParam String mensaje) {
-
         String respuesta = webClient.get()
                 .uri("http://localhost:8081/api/v1/jaulas/notificar?mensaje={mensaje}", mensaje)
                 .retrieve()

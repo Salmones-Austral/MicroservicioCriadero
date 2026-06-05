@@ -11,34 +11,19 @@ import org.springframework.data.repository.query.Param;
 @Repository
 public interface CriaderoRepository extends JpaRepository<Criadero, Integer> {
 
-    
-    // MÉTODOS DERIVADOS (SPRING DATA)
-   
+    // DESCOMENTADO: Lo necesitamos para el negocio
+    List<Criadero> findByEstado(String estado);
 
-    // Criaderos activos
-   // List<Criadero> findByEstado(String estado);
-
-    // Buscar por nombre (contiene, ignore case)
     List<Criadero> findByNombreContainingIgnoreCase(String nombre);
-
-    // Buscar por región (útil en negocio salmonero)
     List<Criadero> findByRegion(String region);
 
-
-    // MÉTODOS PERSONALIZADOS
-   
-
-    // Igual que tu ejemplo (default method)
     default long totalCriaderos() {
         return this.count();
     }
 
-    // Query JPQL
     @Query("SELECT c FROM Criadero c WHERE c.capacidadJaulas > :capacidad")
     List<Criadero> findCriaderosConAltaCapacidad(@Param("capacidad") int capacidad);
 
-    // Query nativa (como tu ejemplo de editorial)
     @Query(value = "SELECT * FROM criaderos WHERE region = :region", nativeQuery = true)
     List<Criadero> selectPorRegion(@Param("region") String region);
-
 }
