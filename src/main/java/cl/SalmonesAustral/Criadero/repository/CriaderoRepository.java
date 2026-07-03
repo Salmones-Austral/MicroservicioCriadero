@@ -13,7 +13,6 @@ public interface CriaderoRepository extends JpaRepository<Criadero, Integer> {
 
     // DESCOMENTADO: Lo necesitamos para el negocio
     List<Criadero> findByEstado(String estado);
-
     List<Criadero> findByNombreContainingIgnoreCase(String nombre);
     List<Criadero> findByRegion(String region);
 
