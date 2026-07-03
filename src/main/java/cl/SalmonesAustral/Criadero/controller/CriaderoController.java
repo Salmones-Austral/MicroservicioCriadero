@@ -165,4 +165,10 @@ public class CriaderoController {
         System.out.println("📩 Mensaje recibido desde microservicio Jaulas: " + mensaje); // Lo imprime en consola (logs locales)
         return ResponseEntity.ok("Criadero recibió: " + mensaje);                // Acuse de recibo para el que lo mandó
     }
+
+    @GetMapping("/{nombre}") 
+    public ResponseEntity<List<Criadero>> obtenerCriaderosPorNombre(@PathVariable String nombre) {
+        List<Criadero> criaderos = criaderoService.findByNombre(nombre);
+        return ResponseEntity.ok(criaderos);
+    }
 }
