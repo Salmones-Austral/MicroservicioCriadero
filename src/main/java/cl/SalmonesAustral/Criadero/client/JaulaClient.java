@@ -29,6 +29,6 @@ public class JaulaClient {
                     logger.error("Error al comunicarse con el microservicio de Jaula: {}", e.getMessage());
                     return Mono.just(false); 
                 })
-                .block(); // Bloqueo temporal sincrónico (típico en Spring MVC)
+                .block(); // Bloqueo temporal sincrónico 
     }
 }
